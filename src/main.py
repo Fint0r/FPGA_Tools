@@ -3,7 +3,7 @@ import re
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem, QComboBox, QFileDialog
 
-import generators_parser
+import gen_and_parse
 import sys
 
 port_list = {
@@ -192,7 +192,7 @@ class Ui_MainWindow(object):
         self.input_file_path = QFileDialog.getOpenFileName()[0]
         self.xdc_ports = {}
         if self.input_file_path != '':
-            ports, module_name, libs = generators_parser.get_stuff(self.input_file_path)
+            ports, module_name, libs = gen_and_parse.get_stuff(self.input_file_path)
 
             # : in std_logic_vector (7 downto 0);
 
@@ -226,7 +226,7 @@ class Ui_MainWindow(object):
     def generate_tb(self):
         self.output_file_path = QFileDialog.getSaveFileName()[0]
         if self.output_file_path != '':
-            generators_parser.generate_tb(self.input_file_path, self.output_file_path)
+            gen_and_parse.generate_tb(self.input_file_path, self.output_file_path)
 
     def generate_constraint(self):
         constraint_output_file_path = QFileDialog.getSaveFileName()[0]
@@ -236,7 +236,7 @@ class Ui_MainWindow(object):
                 port_name = self.tableWidget.item(i, 0).text()  # port_name
                 package_name = port_list[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
                 constr_ports[port_name] = package_name
-                generators_parser.write_const_to_file(constr_ports, constraint_output_file_path)
+                gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path)
 
 
 def main():
