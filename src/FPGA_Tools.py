@@ -3,132 +3,11 @@ import re
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem, QComboBox, QFileDialog
 
-import gen_and_parse
+import src.gen_and_parse as gen_and_parse
 import sys
+from src.db import nexys_ddr_portlist, nexys_portlist
 
-port_list = {
-    'SW0': 'J15',
-    'SW1': 'L16',
-    'SW2': 'M13',
-    'SW3': 'R15',
-    'SW4': 'R17',
-    'SW5': 'T18',
-    'SW6': 'U18',
-    'SW7': 'R13',
-    'SW8': 'T8',
-    'SW9': 'U8',
-    'SW10': 'R16',
-    'SW11': 'T13',
-    'SW12': 'H6',
-    'SW13': 'U12',
-    'SW14': 'U11',
-    'SW15': 'V10',
-
-    'LED0': 'H17',
-    'LED1': 'K15',
-    'LED2': 'J13',
-    'LED3': 'N14',
-    'LED4': 'R18',
-    'LED5': 'V17',
-    'LED6': 'U17',
-    'LED7': 'U16',
-    'LED8': 'V16',
-    'LED9': 'T15',
-    'LED10': 'U14',
-    'LED11': 'T16',
-    'LED12': 'V15',
-    'LED13': 'V14',
-    'LED14': 'V12',
-    'LED15': 'V11',
-    'LED16_B': 'R12',
-    'LED16_G': 'M16',
-    'LED16_R': 'N15',
-    'LED17_B': 'G14',
-    'LED17_G': 'R11',
-    'LED17_R': 'N16',
-
-    '7SEG_CA': 'T10',
-    '7SEG_CB': 'R10',
-    '7SEG_CC': 'K16',
-    '7SEG_CD': 'K13',
-    '7SEG_CE': 'P15',
-    '7SEG_CF': 'T11',
-    '7SEG_CG': 'L18',
-    '7SEG_DP': 'H15',
-    '7SEG_AN0': 'J17',
-    '7SEG_AN1': 'J18',
-    '7SEG_AN2': 'T9',
-    '7SEG_AN3': 'J14',
-    '7SEG_AN4': 'P14',
-    '7SEG_AN5': 'T14',
-    '7SEG_AN6': 'K2',
-    '7SEG_AN7': 'U13',
-
-    'CPU_RESETN': 'C12',
-
-    'BTN3': 'N17',
-    'BTN2': 'M18',
-    'BTN1': 'P17',
-    'BTN0': 'M17',
-    'BTND': 'P18',
-
-    'VGA_RED0': 'A3',
-    'VGA_RED1': 'B4',
-    'VGA_RED2': 'C5',
-    'VGA_RED3': 'A4',
-    'VGA_GREEN0': 'C6',
-    'VGA_GREEN1': 'A5',
-    'VGA_GREEN2': 'B6',
-    'VGA_GREEN3': 'A6',
-    'VGA_BLUE0': 'B7',
-    'VGA_BLUE1': 'C7',
-    'VGA_BLUE2': 'D7',
-    'VGA_BLUE3': 'D8',
-    'VGA_HSYNC': 'B11',
-    'VGA_VSYNC': 'B12',
-
-    'UART_TXD_IN': 'C4',
-    'UART_RXD_OUT': 'D4',
-    'UART_CTS': 'D3',
-    'UART_RTS': 'E5',
-
-    'PS2_CLK': 'F4',
-    'PS2_DATA': 'B2',
-
-    'ACL_MISO': 'E15',
-    'ACL_MOSI': 'F14',
-    'ACL_SCLK': 'F15',
-    'ACL_CSN': 'D15',
-    'ACL_INT1': 'B13',
-    'ACL_INT2': 'C16',
-
-    'TMP_SCL': 'C14',
-    'TMP_SDA': 'C15',
-    'TMP_INT': 'D13',
-    'TMP_CT': 'B14',
-
-    'AUD_PWM': 'A11',
-    'AUD_SD': 'D12',
-
-    'SD_RESET': 'E2',
-    'SD_CD': 'A1',
-    'SD_SCK': 'B1',
-    'SD_CMD': 'C1',
-    'SD_DAT0': 'C2',
-    'SD_DAT1': 'E1',
-    'SD_DAT2': 'F1',
-    'SD_DAT3': 'D2',
-
-    'MIC_CLK': 'J5',
-    'MIC_DATA': 'H5',
-    'MIC_LRSEL': 'F5',
-
-    'QSPI_D0': 'K17',
-    'QSPI_D1': 'K18',
-    'QSPI_D2': 'L14',
-    'QSPI_D3': 'M14',
-    'QSPI_CSN': 'L13'
-}
+ddr_chosen = False
 
 
 class Ui_MainWindow(object):
@@ -164,6 +43,13 @@ class Ui_MainWindow(object):
         self.pushButton_3.setGeometry(QtCore.QRect(460, 10, 151, 31))
         self.pushButton_3.setAutoFillBackground(False)
         self.pushButton_3.setObjectName("pushButton_3")
+        self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton.setGeometry(QtCore.QRect(20, 50, 82, 17))
+        self.radioButton.setObjectName("radioButton")
+        self.radioButton.setChecked(True)
+        self.radioButton_2 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_2.setGeometry(QtCore.QRect(110, 50, 82, 17))
+        self.radioButton_2.setObjectName("radioButton_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -187,14 +73,34 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "I/O"))
         self.pushButton_3.setText(_translate("MainWindow", "Generate Constraint"))
         self.pushButton_3.clicked.connect(self.generate_constraint)
+        self.radioButton.setText(_translate("MainWindow", "Nexys4"))
+        self.radioButton_2.setText(_translate("MainWindow", "Nexys4 DDR"))
+        self.radioButton.clicked.connect(self.chosen_nexys)
+        self.radioButton_2.clicked.connect(self.chosen_nexys_ddr)
+
+    def chosen_nexys(self):
+        print('1')
+        global ddr_chosen
+        ddr_chosen = False
+        for i in range(self.tableWidget.rowCount()):
+            combobox = QtWidgets.QComboBox()
+            combobox.addItems(nexys_portlist.keys())
+            self.tableWidget.setCellWidget(i, 1, combobox)
+
+    def chosen_nexys_ddr(self):
+        print('2')
+        global ddr_chosen
+        ddr_chosen = True
+        for i in range(self.tableWidget.rowCount()):
+            combobox = QtWidgets.QComboBox()
+            combobox.addItems(nexys_ddr_portlist.keys())
+            self.tableWidget.setCellWidget(i, 1, combobox)
 
     def browse(self):
         self.input_file_path = QFileDialog.getOpenFileName()[0]
         self.xdc_ports = {}
         if self.input_file_path != '':
             ports, module_name, libs = gen_and_parse.get_stuff(self.input_file_path)
-
-            # : in std_logic_vector (7 downto 0);
 
             for key, value in ports.items():
                 self.xdc_ports[key] = value
@@ -220,7 +126,7 @@ class Ui_MainWindow(object):
                 self.tableWidget.setItem(i, 0, temp_w)
 
                 combobox = QtWidgets.QComboBox()
-                combobox.addItems(port_list.keys())
+                combobox.addItems(nexys_portlist.keys())
                 self.tableWidget.setCellWidget(i, 1, combobox)
 
     def generate_tb(self):
@@ -234,7 +140,10 @@ class Ui_MainWindow(object):
             constr_ports = {}
             for i in range(self.tableWidget.rowCount()):
                 port_name = self.tableWidget.item(i, 0).text()  # port_name
-                package_name = port_list[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                if ddr_chosen:
+                    package_name = nexys_ddr_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                else:
+                    package_name = nexys_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
                 constr_ports[port_name] = package_name
                 gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path)
 
