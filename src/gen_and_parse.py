@@ -34,7 +34,7 @@ def parse_entity(file_content):
 
     string_content = '\n'.join(file_content)
     regex_pattern = rf'entity.*{module_name} is.*Port *\( *(.*)( +)?\) *;.*end.*{module_name} *;'
-    raw_portlist = (re.search(regex_pattern, string_content, re.DOTALL | re.MULTILINE).group(1)).split('\n')
+    raw_portlist = (re.search(regex_pattern, string_content, re.DOTALL | re.MULTILINE | re.IGNORECASE).group(1)).split('\n')
 
     ports = {}
 
