@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
         self.tableWidget.verticalHeader().setVisible(False)
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.move(520, 10)
+        self.pushButton_3.move(500, 10)
         self.pushButton_3.setMinimumHeight(31)
         self.pushButton_3.setAutoFillBackground(False)
         self.pushButton_3.setObjectName("pushButton_3")
