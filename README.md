@@ -11,7 +11,7 @@ Controls:
  - **Generate Constraint:** Click if you want to generate constraints for your project. Double check your Signal - I/O bindings.
  - **Switch between Nexys4 and Nexys4 DDR** with radio buttons
  
-![Picture of GUI](misc\doc\sw_gui.jpg?raw=true "Picture of the SW")
+![Picture of GUI](https://github.com/Fint0r/FPGA_Tools/blob/master/misc/doc/sw_gui.jpg?raw=true "Picture of the SW")
 
 ## Windows
 
