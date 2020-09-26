@@ -15,5 +15,9 @@ Exe generation can be run with misc/generate_exe.bat.
 Executable can be found in "Runnable exe" folder.\
 You can generate the executable by running the misc/generate_linux.sh script.
 
-
+## Misc
 Generated GUI design can be found in misc/gui_design.ui. Created with QT Designer.
+Few popular antivirus software alerts useres about virus in exe. Its false positive alert, because the exe is unsigned (not certificated) [more about signing EXE](https://stackoverflow.com/questions/252226/signing-a-windows-exe-file?noredirect=1&lq=1). [VirusTotal report](https://www.virustotal.com/gui/file/15d41d4d85b69bdeec66af8920b53919d32ba3c486c09b2b85eca7ae09223686/detection)
+If you would like to generate your own "virus free" exe you can use [generate_exe.bat](https://github.com/Fint0r/FPGA_Tools/blob/master/misc/generate_exe.bat), in this case you need all of the dependencies installed for your python.
+
+### Feel free to contact us if you have any question.
