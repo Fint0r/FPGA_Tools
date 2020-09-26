@@ -14,6 +14,8 @@ class Ui_MainWindow(object):
     input_file_path = ''
     output_file_path = ''
     xdc_ports = {}
+    input_file_name = ''
+    project_path = ''
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -97,7 +99,11 @@ class Ui_MainWindow(object):
             self.tableWidget.setCellWidget(i, 1, combobox)
 
     def browse(self):
-        self.input_file_path = QFileDialog.getOpenFileName()[0]
+        qfd = QFileDialog()
+        file_filter = 'VHDL file(*.vhd);;All files(*)'
+        self.input_file_path = QFileDialog.getOpenFileName(qfd, 'Open source file',  'C:/', file_filter)[0]
+        self.input_file_name = self.input_file_path.split("/")[-1]
+        self.project_path = '/'.join(self.input_file_path.split("/")[:-1]) + '/'
         self.xdc_ports = {}
         if self.input_file_path != '':
             ports, module_name, libs = gen_and_parse.get_stuff(self.input_file_path)
@@ -130,12 +136,18 @@ class Ui_MainWindow(object):
                 self.tableWidget.setCellWidget(i, 1, combobox)
 
     def generate_tb(self):
-        self.output_file_path = QFileDialog.getSaveFileName()[0]
+        qfd = QFileDialog()
+        file_filter = 'VHDL file(*.vhd)'
+        tb_file_path = f'{self.project_path}tb_{self.input_file_name}'
+        self.output_file_path = QFileDialog.getSaveFileName(qfd, f'Save TestBench file', tb_file_path, file_filter)[0]
         if self.output_file_path != '':
             gen_and_parse.generate_tb(self.input_file_path, self.output_file_path)
 
     def generate_constraint(self):
-        constraint_output_file_path = QFileDialog.getSaveFileName()[0]
+        qfd = QFileDialog()
+        file_filter = 'XDC file(*.xdc)'
+        tb_file_path = f'{self.project_path}constraints.xdc'
+        constraint_output_file_path = QFileDialog.getSaveFileName(qfd, f'Save Constraint file', tb_file_path, file_filter)[0]
         if constraint_output_file_path != '':
             constr_ports = {}
             for i in range(self.tableWidget.rowCount()):

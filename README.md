@@ -5,6 +5,14 @@ Project supports:
   - TestBench generation
   - Constraint generation
 
+Controls:
+ - **Browse:** Search for your source VHDL file. Will be used for signal names and the base for the generation.
+ - **Generat TestBench:** Click if you want to generate testbench for your project.
+ - **Generate Constraint:** Click if you want to generate constraints for your project. Double check your Signal - I/O bindings.
+ - **Switch between Nexys4 and Nexys4 DDR** with radio buttons
+ 
+![Picture of GUI](misc\doc\sw_gui.jpg?raw=true "Picture of the SW")
+
 ## Windows
 
 Runnable exe can be found under "Runnable exe" folder.\
