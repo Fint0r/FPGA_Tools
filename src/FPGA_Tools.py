@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.move(140, 10)
+        self.pushButton.move(100, 10)
         self.pushButton.setMinimumHeight(31)
         self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
         self.tableWidget.verticalHeader().setVisible(False)
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.move(460, 10)
+        self.pushButton_3.move(520, 10)
         self.pushButton_3.setMinimumHeight(31)
         self.pushButton_3.setAutoFillBackground(False)
         self.pushButton_3.setObjectName("pushButton_3")
@@ -86,22 +86,22 @@ class Ui_MainWindow(object):
         self.radioButton_2.clicked.connect(self.chosen_nexys_ddr)
 
     def chosen_nexys(self):
-        print('1')
         global ddr_chosen
         ddr_chosen = False
-        for i in range(self.tableWidget.rowCount()):
-            combobox = QtWidgets.QComboBox()
-            combobox.addItems(nexys_portlist.keys())
-            self.tableWidget.setCellWidget(i, 1, combobox)
+        if self.input_file_name != '':
+            for i in range(self.tableWidget.rowCount()):
+                combobox = QtWidgets.QComboBox()
+                combobox.addItems(nexys_portlist.keys())
+                self.tableWidget.setCellWidget(i, 1, combobox)
 
     def chosen_nexys_ddr(self):
-        print('2')
         global ddr_chosen
         ddr_chosen = True
-        for i in range(self.tableWidget.rowCount()):
-            combobox = QtWidgets.QComboBox()
-            combobox.addItems(nexys_ddr_portlist.keys())
-            self.tableWidget.setCellWidget(i, 1, combobox)
+        if self.input_file_name != '':
+            for i in range(self.tableWidget.rowCount()):
+                combobox = QtWidgets.QComboBox()
+                combobox.addItems(nexys_ddr_portlist.keys())
+                self.tableWidget.setCellWidget(i, 1, combobox)
 
     def browse(self):
         qfd = QFileDialog()
@@ -131,38 +131,43 @@ class Ui_MainWindow(object):
                     pass
 
             self.tableWidget.setRowCount(len(self.xdc_ports.keys()))
-
+            global ddr_chosen
             for i, port in enumerate(self.xdc_ports, start=0):
                 temp_w = QTableWidgetItem(port)
                 self.tableWidget.setItem(i, 0, temp_w)
 
                 combobox = QtWidgets.QComboBox()
-                combobox.addItems(nexys_portlist.keys())
+                if ddr_chosen:
+                    combobox.addItems(nexys_ddr_portlist.keys())
+                else:
+                    combobox.addItems(nexys_portlist.keys())
                 self.tableWidget.setCellWidget(i, 1, combobox)
 
     def generate_tb(self):
-        qfd = QFileDialog()
-        file_filter = 'VHDL file(*.vhd)'
-        tb_file_path = f'{self.project_path}tb_{self.input_file_name}'
-        self.output_file_path = QFileDialog.getSaveFileName(qfd, f'Save TestBench file', tb_file_path, file_filter)[0]
-        if self.output_file_path != '':
-            gen_and_parse.generate_tb(self.input_file_path, self.output_file_path)
+        if self.input_file_name != '':
+            qfd = QFileDialog()
+            file_filter = 'VHDL file(*.vhd)'
+            tb_file_path = f'{self.project_path}tb_{self.input_file_name}'
+            self.output_file_path = QFileDialog.getSaveFileName(qfd, f'Save TestBench file', tb_file_path, file_filter)[0]
+            if self.output_file_path != '':
+                gen_and_parse.generate_tb(self.input_file_path, self.output_file_path)
 
     def generate_constraint(self):
-        qfd = QFileDialog()
-        file_filter = 'XDC file(*.xdc)'
-        tb_file_path = f'{self.project_path}constraints.xdc'
-        constraint_output_file_path = QFileDialog.getSaveFileName(qfd, f'Save Constraint file', tb_file_path, file_filter)[0]
-        if constraint_output_file_path != '':
-            constr_ports = {}
-            for i in range(self.tableWidget.rowCount()):
-                port_name = self.tableWidget.item(i, 0).text()  # port_name
-                if ddr_chosen:
-                    package_name = nexys_ddr_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
-                else:
-                    package_name = nexys_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
-                constr_ports[port_name] = package_name
-                gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path)
+        if self.input_file_name != '':
+            qfd = QFileDialog()
+            file_filter = 'XDC file(*.xdc)'
+            tb_file_path = f'{self.project_path}constraints.xdc'
+            constraint_output_file_path = QFileDialog.getSaveFileName(qfd, f'Save Constraint file', tb_file_path, file_filter)[0]
+            if constraint_output_file_path != '':
+                constr_ports = {}
+                for i in range(self.tableWidget.rowCount()):
+                    port_name = self.tableWidget.item(i, 0).text()  # port_name
+                    if ddr_chosen:
+                        package_name = nexys_ddr_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                    else:
+                        package_name = nexys_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                    constr_ports[port_name] = package_name
+                    gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path)
 
 
 def main():
