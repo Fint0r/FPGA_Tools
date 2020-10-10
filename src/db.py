@@ -120,7 +120,9 @@ nexys_ddr_portlist = {
     "QSPI_D1": "K18",
     "QSPI_D2": "L14",
     "QSPI_D3": "M14",
-    "QSPI_CSN": "L13"
+    "QSPI_CSN": "L13",
+
+    "Clock": ""
 }
 
 nexys_portlist = {
@@ -246,5 +248,7 @@ nexys_portlist = {
     "QSPI_D1": "K18",
     "QSPI_D2": "L14",
     "QSPI_D3": "M14",
-    "QSPI_CSN": "L13"
+    "QSPI_CSN": "L13",
+
+    "Clock": ""
 }

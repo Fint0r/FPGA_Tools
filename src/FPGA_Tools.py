@@ -16,6 +16,7 @@ class Ui_MainWindow(object):
     xdc_ports = {}
     input_file_name = ''
     project_path = ''
+    using_onboard_clock = False
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -61,6 +62,9 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox.setGeometry(QtCore.QRect(220, 50, 151, 17))
+        self.checkBox.setObjectName("checkBox")
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -84,6 +88,14 @@ class Ui_MainWindow(object):
         self.radioButton_2.setText(_translate("MainWindow", "Nexys4 DDR"))
         self.radioButton.clicked.connect(self.chosen_nexys)
         self.radioButton_2.clicked.connect(self.chosen_nexys_ddr)
+        self.checkBox.setText(_translate("MainWindow", "Use onboard 100MHz clock"))
+        self.checkBox.clicked.connect(self.onboard_clock_clicked)
+
+    def onboard_clock_clicked(self):
+        if self.checkBox.checkState():
+            self.using_onboard_clock = True
+        else:
+            self.using_onboard_clock = False
 
     def chosen_nexys(self):
         global ddr_chosen
@@ -161,13 +173,17 @@ class Ui_MainWindow(object):
             if constraint_output_file_path != '':
                 constr_ports = {}
                 for i in range(self.tableWidget.rowCount()):
-                    port_name = self.tableWidget.item(i, 0).text()  # port_name
-                    if ddr_chosen:
-                        package_name = nexys_ddr_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                    port_name = self.tableWidget.item(i, 0).text()
+                    if 'Clock' == self.tableWidget.cellWidget(i, 1).currentText():
+                        constr_ports['Clock'] = port_name
+                        continue
                     else:
-                        package_name = nexys_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
-                    constr_ports[port_name] = package_name
-                    gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path)
+                        if ddr_chosen:
+                            package_name = nexys_ddr_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                        else:
+                            package_name = nexys_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                        constr_ports[port_name] = package_name
+                gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path, self.using_onboard_clock)
 
 
 def main():
