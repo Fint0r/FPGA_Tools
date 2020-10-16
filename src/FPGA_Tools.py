@@ -1,6 +1,7 @@
 import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QEvent, QModelIndex
 from PyQt5.QtWidgets import QTableWidgetItem, QComboBox, QFileDialog
 
 import src.gen_and_parse as gen_and_parse
@@ -20,19 +21,20 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(650, 590)
+        MainWindow.resize(630, 500)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setHorizontalSpacing(6)
+        self.gridLayout.setContentsMargins(5, 5, 5, 5)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.move(100, 10)
-        self.pushButton.setMinimumHeight(31)
         self.pushButton.setObjectName("pushButton")
+        self.gridLayout.addWidget(self.pushButton, 0, 2, 1, 1)
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.move(10, 10)
-        self.pushButton_2.setMinimumHeight(31)
         self.pushButton_2.setObjectName("pushButton_2")
+        self.gridLayout.addWidget(self.pushButton_2, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(10, 70, 620, 500))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(2)
         self.tableWidget.setRowCount(2)
@@ -44,27 +46,22 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(1, item)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
         self.tableWidget.verticalHeader().setVisible(False)
+        self.gridLayout.addWidget(self.tableWidget, 2, 0, 1, 4)
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.move(500, 10)
-        self.pushButton_3.setMinimumHeight(31)
         self.pushButton_3.setAutoFillBackground(False)
         self.pushButton_3.setObjectName("pushButton_3")
+        self.gridLayout.addWidget(self.pushButton_3, 0, 3, 1, 1)
         self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton.move(20, 50)
-        self.radioButton.setMinimumHeight(17)
         self.radioButton.setObjectName("radioButton")
         self.radioButton.setChecked(True)
+        self.gridLayout.addWidget(self.radioButton, 1, 0, 1, 1, QtCore.Qt.AlignLeft)
         self.radioButton_2 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_2.move(110, 50)
-        self.radioButton_2.setMinimumHeight(17)
         self.radioButton_2.setObjectName("radioButton_2")
+        self.gridLayout.addWidget(self.radioButton_2, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(220, 50, 151, 17))
         self.checkBox.setObjectName("checkBox")
+        self.gridLayout.addWidget(self.checkBox, 1, 2, 1, 1)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

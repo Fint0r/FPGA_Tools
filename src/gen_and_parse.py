@@ -1,72 +1,61 @@
 import re
-import sys
 
 
 def read_file_content(path):
     with open(path, 'r')as fc:
-        return fc.readlines()
+        return fc.read(-1)
 
 
 def delete_comments(file_content):
-    stripped_file_content = []
-    for line in file_content:
-        string_temp = re.sub(r'--.*', '', line).strip()  # Removing comments and newline characters
-        string_temp = re.sub(r' +', ' ', string_temp)
-        stripped_file_content.append(string_temp)
-    stripped_file_content = [x for x in stripped_file_content if x != '']
-
-    return stripped_file_content
+    string_temp = re.sub(r'--.*\n', '', file_content)  # Removing comments
+    string_temp = re.sub(r'\n+', ' ', string_temp)  # Replace new line with space
+    string_temp = re.sub(r' +', ' ', string_temp)   # Replace >1 spaces with 1 space
+    return string_temp
 
 
 def parse_libs(file_content):
-    return [x for x in file_content if re.search(r'(library|use).*', x, re.IGNORECASE) is not None]
+    return [x[0] for x in re.findall(r'((library|use).*?;)', file_content, re.IGNORECASE)]
 
 
 def parse_entity(file_content):
-    for line in file_content:
-        re_match = re.match(r'entity (.*) is', line, re.IGNORECASE)
-        if re_match:
-            module_name = re_match.group(1)
-            break
+    module_name = re.search(r'entity (.*?) is', file_content, re.IGNORECASE).group(1)
+    if module_name:
+        regex_pattern = rf'entity\s+{module_name}\s+is.*?port\s*\(\s*(.*?)\s*\)\s*\)\s*;'
+        raw_portlist = (re.search(regex_pattern, file_content, re.IGNORECASE).group(1)).split(';')
+
+        ports = {}
+
+        for port in raw_portlist:
+            if port == '':
+                continue
+            port_name, port_spec = port.split(':')
+            port_name = port_name.strip()
+            ports[port_name] = []
+
+            if 'in' in port_spec or 'IN' in port_spec:
+                spec = re.split('in', port_spec, flags=re.IGNORECASE)[-1]
+                ports[port_name].append('in')
+                ports[port_name].append(spec.strip())
+            elif 'out' in port_spec or 'OUT' in port_spec:
+                spec = re.split('out', port_spec, flags=re.IGNORECASE)[-1]
+                ports[port_name].append('out')
+                ports[port_name].append(spec.strip())
+            elif 'inout' in port_spec or 'INOUT' in port_spec:
+                spec = re.split('inout', port_spec, flags=re.IGNORECASE)[-1]
+                ports[port_name].append('inout')
+                ports[port_name].append(spec.strip())
+            elif 'buffer' in port_spec or 'BUFFER' in port_spec:
+                spec = re.split('buffer', port_spec, flags=re.IGNORECASE)[-1]
+                ports[port_name].append('buffer')
+                ports[port_name].append(spec.strip())
+            elif 'linkage' in port_spec or 'LINKAGE' in port_spec:
+                spec = re.split('linkage', port_spec, flags=re.IGNORECASE)[-1]
+                ports[port_name].append('linkage')
+                ports[port_name].append(spec.strip())
+        return ports, module_name
     else:
         print('Did not find any module name.')
-        sys.exit()
 
-    string_content = '\n'.join(file_content)
-    regex_pattern = rf'entity.*{module_name} is.*port *\( *(.*)( +)?\) *;.*end.*{module_name} *;'
-    raw_portlist = (re.search(regex_pattern, string_content, re.DOTALL | re.MULTILINE | re.IGNORECASE).group(1)).split('\n')
-
-    ports = {}
-
-    for port in raw_portlist:
-        if port == '':
-            continue
-        port_name, port_spec = port.split(':')
-        port_name = port_name.strip()
-        ports[port_name] = []
-
-        if 'in' in port_spec or 'IN' in port_spec:
-            spec = re.split('in', port_spec, flags=re.IGNORECASE)[-1]
-            ports[port_name].append('in')
-            ports[port_name].append(spec.strip())
-        elif 'out' in port_spec or 'OUT' in port_spec:
-            spec = re.split('out', port_spec, flags=re.IGNORECASE)[-1]
-            ports[port_name].append('out')
-            ports[port_name].append(spec.strip())
-        elif 'inout' in port_spec or 'INOUT' in port_spec:
-            spec = re.split('inout', port_spec, flags=re.IGNORECASE)[-1]
-            ports[port_name].append('inout')
-            ports[port_name].append(spec.strip())
-        elif 'buffer' in port_spec or 'BUFFER' in port_spec:
-            spec = re.split('buffer', port_spec, flags=re.IGNORECASE)[-1]
-            ports[port_name].append('buffer')
-            ports[port_name].append(spec.strip())
-        elif 'linkage' in port_spec or 'LINKAGE' in port_spec:
-            spec = re.split('linkage', port_spec, flags=re.IGNORECASE)[-1]
-            ports[port_name].append('linkage')
-            ports[port_name].append(spec.strip())
-
-    return ports, module_name
 
 
 def create_tb(libs, ports, module_name, output_path):
