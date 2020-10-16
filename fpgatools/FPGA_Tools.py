@@ -1,14 +1,54 @@
 import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QEvent, QModelIndex
-from PyQt5.QtWidgets import QTableWidgetItem, QComboBox, QFileDialog
+from PyQt5.QtCore import QModelIndex, QEvent
+from PyQt5.QtWidgets import QTableWidgetItem, QComboBox, QFileDialog, QTreeView, QFrame
 
 import fpgatools.gen_and_parse as gen_and_parse
 import sys
 from fpgatools.db import nexys_ddr_portlist, nexys_portlist
 
 ddr_chosen = False
+
+
+class TreeComboBox(QComboBox):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.__skip_next_hide = False
+
+        tree_view = QTreeView(self)
+        tree_view.setFrameShape(QFrame.NoFrame)
+        tree_view.setEditTriggers(tree_view.NoEditTriggers)
+        tree_view.setAlternatingRowColors(True)
+        tree_view.setSelectionBehavior(tree_view.SelectRows)
+        tree_view.setWordWrap(True)
+        tree_view.setAllColumnsShowFocus(True)
+        tree_view.setHeaderHidden(True)
+        self.setView(tree_view)
+        self.view().viewport().installEventFilter(self)
+
+    def showPopup(self):
+        self.setRootModelIndex(QModelIndex())
+        super().showPopup()
+
+    def hidePopup(self):
+        self.setRootModelIndex(self.view().currentIndex().parent())
+        self.setCurrentIndex(self.view().currentIndex().row())
+        if self.__skip_next_hide:
+            self.__skip_next_hide = False
+        else:
+            super().hidePopup()
+
+    def selectIndex(self, index):
+        self.setRootModelIndex(index.parent())
+        self.setCurrentIndex(index.row())
+
+    def eventFilter(self, object, event):
+        if event.type() == QEvent.MouseButtonPress and object is self.view().viewport():
+            index = self.view().indexAt(event.pos())
+            self.__skip_next_hide = not self.view().visualRect(index).contains(event.pos())
+        return False
 
 
 class Ui_MainWindow(object):
@@ -18,6 +58,7 @@ class Ui_MainWindow(object):
     input_file_name = ''
     project_path = ''
     using_onboard_clock = False
+    flattened_portlist = {}
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -99,18 +140,14 @@ class Ui_MainWindow(object):
         ddr_chosen = False
         if self.input_file_name != '':
             for i in range(self.tableWidget.rowCount()):
-                combobox = QtWidgets.QComboBox()
-                combobox.addItems(nexys_portlist.keys())
-                self.tableWidget.setCellWidget(i, 1, combobox)
+                self.set_items_in_table(i)
 
     def chosen_nexys_ddr(self):
         global ddr_chosen
         ddr_chosen = True
         if self.input_file_name != '':
             for i in range(self.tableWidget.rowCount()):
-                combobox = QtWidgets.QComboBox()
-                combobox.addItems(nexys_ddr_portlist.keys())
-                self.tableWidget.setCellWidget(i, 1, combobox)
+                self.set_items_in_table(i)
 
     def browse(self):
         qfd = QFileDialog()
@@ -144,13 +181,28 @@ class Ui_MainWindow(object):
             for i, port in enumerate(self.xdc_ports, start=0):
                 temp_w = QTableWidgetItem(port)
                 self.tableWidget.setItem(i, 0, temp_w)
+                self.set_items_in_table(i)
 
-                combobox = QtWidgets.QComboBox()
-                if ddr_chosen:
-                    combobox.addItems(nexys_ddr_portlist.keys())
-                else:
-                    combobox.addItems(nexys_portlist.keys())
-                self.tableWidget.setCellWidget(i, 1, combobox)
+    def set_items_in_table(self, current_row_id):
+        model = QtGui.QStandardItemModel()
+        if ddr_chosen:
+            chosen_portlist = nexys_ddr_portlist
+        else:
+            chosen_portlist = nexys_portlist
+
+        for key, value in chosen_portlist.items():
+            for port_name, pin in value.items():
+                self.flattened_portlist[port_name] = pin
+
+        for key, value_list in chosen_portlist.items():
+            group = QtGui.QStandardItem(key)
+            for value in value_list:
+                group.appendRow(QtGui.QStandardItem(value))
+            model.appendRow(group)
+        combobox = TreeComboBox()
+        combobox.setModel(model)
+        combobox.setMaxVisibleItems(combobox.count())
+        self.tableWidget.setCellWidget(current_row_id, 1, combobox)
 
     def generate_tb(self):
         if self.input_file_name != '':
@@ -175,11 +227,10 @@ class Ui_MainWindow(object):
                         constr_ports['Clock'] = port_name
                         continue
                     else:
-                        if ddr_chosen:
-                            package_name = nexys_ddr_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
-                        else:
-                            package_name = nexys_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
-                        constr_ports[port_name] = package_name
+                        try:
+                            constr_ports[port_name] = self.flattened_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                        except:
+                            pass
                 gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path, self.using_onboard_clock)
 
 

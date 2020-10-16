@@ -11,7 +11,7 @@ classifiers = [
 
 setup(
     name='fpgatools',
-    version='0.0.2',
+    version='1.1.0',
     author='József Fintor',
     author_email='fintor976@gmail.com',
     description='University project to support FPGA development.',
