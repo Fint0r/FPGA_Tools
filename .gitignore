@@ -138,3 +138,6 @@ __pycache__
 build
 dist
 .spec
+
+# Deploy generation
+fpgatools.egg-info
