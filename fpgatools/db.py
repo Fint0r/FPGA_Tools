@@ -135,7 +135,7 @@ Nexys_4_DDR = {
     },
     "CLK, Reset": {
         "CPU_RESETN": "C12",
-        "Clock": ""
+        "Clock": "E3"
     }
 }
 
@@ -277,6 +277,6 @@ Nexys_4 = {
     },
     "CLK, Reset": {
         "CPU_RESETN": "C12",
-        "Clock": ""
+        "Clock": "E3"
     }
 }

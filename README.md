@@ -6,12 +6,43 @@ Project supports:
   - Constraint generation
 
 Controls:
- - **Browse:** Search for your source VHDL file. Will be used for signal names and the base for the generation.
- - **Generat TestBench:** Click if you want to generate testbench for your project.
- - **Generate Constraint:** Click if you want to generate constraints for your project. Double check your Signal - I/O bindings.
- - **Switch between Nexys4 and Nexys4 DDR** with radio buttons
- - You can choose to **use onboard 100 MHz clock**
+ - **File -> Browse:** Search for your source VHDL file. Will be used for signal names and the base for the generation.
+ - **File -> Import Pinout:** Custom port list can be imported.
+ - **Generate -> TestBench:** Click if you want to generate testbench for your project.
+ - **Generate -> Constraint:** Click if you want to generate constraints for your project. Double check your Signal - I/O bindings.
+ - **Switch between Nexys4 and Nexys4 DDR** with radio buttons.
+ - You can choose to **use onboard 100 MHz clock**.
 ![Picture of GUI](https://github.com/Fint0r/FPGA_Tools/blob/master/misc/doc/sw_gui.jpg?raw=true "Picture of the SW")
+
+## Custom port list format
+Custom pinout (port list) can be added to the software. You can browse your JSON file with File -> Import Pinout.
+Custom port list should be edited according to the following example.
+```json
+{
+   "Name":"Name of your config", // Shall include a name
+   "Switch":{   // Every pin shall be organized into groups
+      "SW0":"J15",  // Key: functionality, Value: IC pin name
+      "SW1":"J16",
+      "SW2":"J17",
+      "SW3":"J18"
+   },
+   "LED":{
+      "LED0":"H17",
+      "LED1":"H18",
+      "LED2":"H19",
+      "LED3":"H20"
+   },
+   "Button":{
+      "BTN0":"U01",
+      "BTN1":"U02",
+      "BTN2":"U03"
+   },
+    "CLK, Reset":{
+      "Clock":"E3",
+      "Reset":"R12" 
+   }
+}
+```
 
 ## Using as library
 You can download files as python library via pip install: "pip install fpgatools".

@@ -296,17 +296,16 @@ class Ui_MainWindow(object):
             constraint_output_file_path = QFileDialog.getSaveFileName(qfd, f'Save Constraint file', tb_file_path, file_filter)[0]
             if constraint_output_file_path != '':
                 constr_ports = {}
+                clock_var = ''
                 for i in range(self.tableWidget.rowCount()):
                     port_name = self.tableWidget.item(i, 0).text()
+                    try:
+                        constr_ports[port_name] = self.flattened_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
+                    except:
+                        pass
                     if 'Clock' == self.tableWidget.cellWidget(i, 1).currentText():
-                        constr_ports['Clock'] = port_name
-                        continue
-                    else:
-                        try:
-                            constr_ports[port_name] = self.flattened_portlist[self.tableWidget.cellWidget(i, 1).currentText()]  # package_pin
-                        except:
-                            pass
-                gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path, self.using_onboard_clock)
+                        clock_var = constr_ports[port_name]
+                gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path, self.using_onboard_clock, clock_var)
         else:
             showdialog('Browse VHDL file first.', 'info')
 
