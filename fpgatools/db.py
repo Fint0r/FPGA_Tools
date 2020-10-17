@@ -1,4 +1,5 @@
-nexys_ddr_portlist = {
+Nexys_4_DDR = {
+    "Name": "Nexys 4 DDR",
     "Switch": {
         "SW0": "J15",
         "SW1": "L16",
@@ -138,7 +139,8 @@ nexys_ddr_portlist = {
     }
 }
 
-nexys_portlist = {
+Nexys_4 = {
+    "Name": "Nexys 4",
     "Switch": {
         "SW0": "U9",
         "SW1": "U8",

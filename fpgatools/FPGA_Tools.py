@@ -1,3 +1,5 @@
+import copy
+import json
 import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -6,7 +8,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QComboBox, QFileDialog, QTreeView,
 
 import fpgatools.gen_and_parse as gen_and_parse
 import sys
-from fpgatools.db import nexys_ddr_portlist, nexys_portlist
+from fpgatools.db import Nexys_4_DDR, Nexys_4
 
 ddr_chosen = False
 
@@ -59,50 +61,75 @@ class Ui_MainWindow(object):
     project_path = ''
     using_onboard_clock = False
     flattened_portlist = {}
+    all_port = [Nexys_4, Nexys_4_DDR]
+    chosen_portlist = {}
+    pinout_name_list = []
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(630, 500)
+        MainWindow.setMinimumSize(640, 500)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName("gridLayout")
-        self.gridLayout.setHorizontalSpacing(6)
-        self.gridLayout.setContentsMargins(5, 5, 5, 5)
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 0, 2, 1, 1)
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.gridLayout.addWidget(self.pushButton_2, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout_2.setObjectName("gridLayout_2")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
+        self.tableWidget.setSizePolicy(sizePolicy)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(2)
-        self.tableWidget.setRowCount(2)
+        self.tableWidget.setRowCount(4)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setVerticalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setVerticalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setVerticalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
         self.tableWidget.verticalHeader().setVisible(False)
-        self.gridLayout.addWidget(self.tableWidget, 2, 0, 1, 4)
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setAutoFillBackground(False)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.gridLayout.addWidget(self.pushButton_3, 0, 3, 1, 1)
-        self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton.setObjectName("radioButton")
-        self.radioButton.setChecked(True)
-        self.gridLayout.addWidget(self.radioButton, 1, 0, 1, 1, QtCore.Qt.AlignLeft)
-        self.radioButton_2 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_2.setObjectName("radioButton_2")
-        self.gridLayout.addWidget(self.radioButton_2, 1, 1, 1, 1)
-        MainWindow.setCentralWidget(self.centralwidget)
+        self.gridLayout_2.addWidget(self.tableWidget, 2, 0, 1, 5)
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox.setObjectName("checkBox")
-        self.gridLayout.addWidget(self.checkBox, 1, 2, 1, 1)
+        self.gridLayout_2.addWidget(self.checkBox, 1, 1, 1, 1)
+        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox.setObjectName("comboBox")
+        self.gridLayout_2.addWidget(self.comboBox, 1, 0, 1, 1)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menuBar = QtWidgets.QMenuBar(MainWindow)
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 623, 21))
+        self.menuBar.setObjectName("menuBar")
+        self.menuFile = QtWidgets.QMenu(self.menuBar)
+        self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menuBar)
+        self.menuHelp.setObjectName("menuHelp")
+        self.menuGenerate = QtWidgets.QMenu(self.menuBar)
+        self.menuGenerate.setObjectName("menuGenerate")
+        MainWindow.setMenuBar(self.menuBar)
+        self.actionBrowse = QtWidgets.QAction(MainWindow)
+        self.actionBrowse.setObjectName("actionBrowse")
+        self.actionGenerate_TestBench = QtWidgets.QAction(MainWindow)
+        self.actionGenerate_TestBench.setObjectName("actionGenerate_TestBench")
+        self.actionGenerate_Constraint = QtWidgets.QAction(MainWindow)
+        self.actionGenerate_Constraint.setObjectName("actionGenerate_Constraint")
+        self.actionTestBench = QtWidgets.QAction(MainWindow)
+        self.actionTestBench.setObjectName("actionTestBench")
+        self.actionConstraint = QtWidgets.QAction(MainWindow)
+        self.actionConstraint.setObjectName("actionConstraint")
+        self.menuFile.addAction(self.actionBrowse)
+        self.menuFile.addAction(self.actionGenerate_TestBench)
+        self.menuGenerate.addAction(self.actionTestBench)
+        self.menuGenerate.addAction(self.actionConstraint)
+        self.menuBar.addAction(self.menuFile.menuAction())
+        self.menuBar.addAction(self.menuGenerate.menuAction())
+        self.menuBar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -110,44 +137,74 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "TestBench and Constraint Generator"))
-        self.pushButton.setText(_translate("MainWindow", "Generate TestBench"))
-        self.pushButton.clicked.connect(self.generate_tb)
-        self.pushButton_2.setText(_translate("MainWindow", "Browse"))
-        self.pushButton_2.clicked.connect(self.browse)
         item = self.tableWidget.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "New Row"))
+        item = self.tableWidget.verticalHeaderItem(1)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.tableWidget.verticalHeaderItem(2)
+        item.setText(_translate("MainWindow", "New Row"))
+        item = self.tableWidget.verticalHeaderItem(3)
+        item.setText(_translate("MainWindow", "New Row"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Signals"))
+        item.setText(_translate("MainWindow", "Signlas"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "I/O"))
-        self.pushButton_3.setText(_translate("MainWindow", "Generate Constraint"))
-        self.pushButton_3.clicked.connect(self.generate_constraint)
-        self.radioButton.setText(_translate("MainWindow", "Nexys4"))
-        self.radioButton_2.setText(_translate("MainWindow", "Nexys4 DDR"))
-        self.radioButton.clicked.connect(self.chosen_nexys)
-        self.radioButton_2.clicked.connect(self.chosen_nexys_ddr)
         self.checkBox.setText(_translate("MainWindow", "Use onboard 100MHz clock"))
+        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.menuHelp.setTitle(_translate("MainWindow", "Help"))
+        self.menuGenerate.setTitle(_translate("MainWindow", "Generate"))
+        self.actionBrowse.setText(_translate("MainWindow", "Browse"))
+        self.actionGenerate_TestBench.setText(_translate("MainWindow", "Import Pinout"))
+        self.actionGenerate_Constraint.setText(_translate("MainWindow", "Generate Constraint"))
+        self.actionTestBench.setText(_translate("MainWindow", "TestBench"))
+        self.actionConstraint.setText(_translate("MainWindow", "Constraint"))
+
+        self.actionBrowse.triggered.connect(self.browse)
+        self.actionTestBench.triggered.connect(self.generate_tb)
+        self.actionConstraint.triggered.connect(self.generate_constraint)
+        self.actionGenerate_TestBench.triggered.connect(self.add_custom_pinout)
         self.checkBox.clicked.connect(self.onboard_clock_clicked)
+        self.comboBox.view().pressed.connect(self.picked_board)
+
+        for element in self.all_port:
+            try:
+                self.pinout_name_list.append(element['Name'])
+            except:
+                self.pinout_name_list.append(element['name'])
+        self.pinout_name_list = sorted(self.pinout_name_list)
+        self.comboBox.addItems(self.pinout_name_list)
+
+        self.chosen_portlist = copy.deepcopy(self.all_port[self.comboBox.currentIndex()])
+        del self.chosen_portlist['Name']
+
+    def add_custom_pinout(self):
+        qfd = QFileDialog()
+        file_filter = 'JSON file(*.json)'
+        json_path = QFileDialog.getOpenFileName(qfd, 'Open json file', 'C:/', file_filter)[0]
+        with open(json_path, 'r')as f:
+            content = json.loads(f.read())
+        self.pinout_name_list.append(content['Name'])
+        self.pinout_name_list = sorted(self.pinout_name_list)
+        self.all_port.append(content)
+        self.comboBox.clear()
+        self.comboBox.addItems(self.pinout_name_list)
+
+    def picked_board(self, index):
+        item = self.pinout_name_list[index.row()]
+        print(item)
+        for element in self.all_port:
+            if element['Name'] == item:
+                self.chosen_portlist = copy.deepcopy(element)
+                del self.chosen_portlist['Name']
+        if self.input_file_name != '':
+            for i in range(self.tableWidget.rowCount()):
+                self.set_items_in_table(i)
 
     def onboard_clock_clicked(self):
         if self.checkBox.checkState():
             self.using_onboard_clock = True
         else:
             self.using_onboard_clock = False
-
-    def chosen_nexys(self):
-        global ddr_chosen
-        ddr_chosen = False
-        if self.input_file_name != '':
-            for i in range(self.tableWidget.rowCount()):
-                self.set_items_in_table(i)
-
-    def chosen_nexys_ddr(self):
-        global ddr_chosen
-        ddr_chosen = True
-        if self.input_file_name != '':
-            for i in range(self.tableWidget.rowCount()):
-                self.set_items_in_table(i)
 
     def browse(self):
         qfd = QFileDialog()
@@ -185,16 +242,12 @@ class Ui_MainWindow(object):
 
     def set_items_in_table(self, current_row_id):
         model = QtGui.QStandardItemModel()
-        if ddr_chosen:
-            chosen_portlist = nexys_ddr_portlist
-        else:
-            chosen_portlist = nexys_portlist
 
-        for key, value in chosen_portlist.items():
+        for key, value in self.chosen_portlist.items():
             for port_name, pin in value.items():
                 self.flattened_portlist[port_name] = pin
 
-        for key, value_list in chosen_portlist.items():
+        for key, value_list in self.chosen_portlist.items():
             group = QtGui.QStandardItem(key)
             for value in value_list:
                 group.appendRow(QtGui.QStandardItem(value))
