@@ -181,13 +181,14 @@ class Ui_MainWindow(object):
         qfd = QFileDialog()
         file_filter = 'JSON file(*.json)'
         json_path = QFileDialog.getOpenFileName(qfd, 'Open json file', 'C:/', file_filter)[0]
-        with open(json_path, 'r')as f:
-            content = json.loads(f.read())
-        self.pinout_name_list.append(content['Name'])
-        self.pinout_name_list = sorted(self.pinout_name_list)
-        self.all_port.append(content)
-        self.comboBox.clear()
-        self.comboBox.addItems(self.pinout_name_list)
+        if json_path != '':
+            with open(json_path, 'r')as f:
+                content = json.loads(f.read())
+            self.pinout_name_list.append(content['Name'])
+            self.pinout_name_list = sorted(self.pinout_name_list)
+            self.all_port.append(content)
+            self.comboBox.clear()
+            self.comboBox.addItems(self.pinout_name_list)
 
     def picked_board(self, index):
         item = self.pinout_name_list[index.row()]
