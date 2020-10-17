@@ -123,10 +123,13 @@ class Ui_MainWindow(object):
         self.actionTestBench.setObjectName("actionTestBench")
         self.actionConstraint = QtWidgets.QAction(MainWindow)
         self.actionConstraint.setObjectName("actionConstraint")
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
         self.menuFile.addAction(self.actionBrowse)
         self.menuFile.addAction(self.actionGenerate_TestBench)
         self.menuGenerate.addAction(self.actionTestBench)
         self.menuGenerate.addAction(self.actionConstraint)
+        self.menuHelp.addAction(self.actionAbout)
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuGenerate.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
@@ -158,6 +161,7 @@ class Ui_MainWindow(object):
         self.actionGenerate_Constraint.setText(_translate("MainWindow", "Generate Constraint"))
         self.actionTestBench.setText(_translate("MainWindow", "TestBench"))
         self.actionConstraint.setText(_translate("MainWindow", "Constraint"))
+        self.actionAbout.setText(_translate("MainWindow", "About"))
 
         self.actionBrowse.triggered.connect(self.browse)
         self.actionTestBench.triggered.connect(self.generate_tb)
@@ -165,6 +169,7 @@ class Ui_MainWindow(object):
         self.actionGenerate_TestBench.triggered.connect(self.add_custom_pinout)
         self.checkBox.clicked.connect(self.onboard_clock_clicked)
         self.comboBox.view().pressed.connect(self.picked_board)
+        self.actionAbout.triggered.connect(self.print_help)
 
         for element in self.all_port:
             try:
@@ -177,22 +182,27 @@ class Ui_MainWindow(object):
         self.chosen_portlist = copy.deepcopy(self.all_port[self.comboBox.currentIndex()])
         del self.chosen_portlist['Name']
 
+    def print_help(self):
+        showdialog('For more information visit <a href="https://github.com/Fint0r/FPGA_Tools/">Our GitHub page.</a><br><br>Feel free to contact is if you have any question', 'info')
+
     def add_custom_pinout(self):
         qfd = QFileDialog()
         file_filter = 'JSON file(*.json)'
         json_path = QFileDialog.getOpenFileName(qfd, 'Open json file', 'C:/', file_filter)[0]
         if json_path != '':
-            with open(json_path, 'r')as f:
-                content = json.loads(f.read())
-            self.pinout_name_list.append(content['Name'])
-            self.pinout_name_list = sorted(self.pinout_name_list)
-            self.all_port.append(content)
-            self.comboBox.clear()
-            self.comboBox.addItems(self.pinout_name_list)
+            try:
+                with open(json_path, 'r')as f:
+                    content = json.loads(f.read())
+                self.pinout_name_list.append(content['Name'])
+                self.pinout_name_list = sorted(self.pinout_name_list)
+                self.all_port.append(content)
+                self.comboBox.clear()
+                self.comboBox.addItems(self.pinout_name_list)
+            except:
+                showdialog('Invalid custom port list format!\nCheck help for more information.')
 
     def picked_board(self, index):
         item = self.pinout_name_list[index.row()]
-        print(item)
         for element in self.all_port:
             if element['Name'] == item:
                 self.chosen_portlist = copy.deepcopy(element)
@@ -200,6 +210,15 @@ class Ui_MainWindow(object):
         if self.input_file_name != '':
             for i in range(self.tableWidget.rowCount()):
                 self.set_items_in_table(i)
+
+        if (item == 'Nexys 4 DDR') or (item == 'Nexys 4'):
+            self.checkBox.show()
+            self.using_onboard_clock = False
+            self.checkBox.setChecked(False)
+        else:
+            self.checkBox.hide()
+            self.using_onboard_clock = False
+            self.checkBox.setChecked(False)
 
     def onboard_clock_clicked(self):
         if self.checkBox.checkState():
@@ -266,6 +285,8 @@ class Ui_MainWindow(object):
             self.output_file_path = QFileDialog.getSaveFileName(qfd, f'Save TestBench file', tb_file_path, file_filter)[0]
             if self.output_file_path != '':
                 gen_and_parse.generate_tb(self.input_file_path, self.output_file_path)
+        else:
+            showdialog('Browse VHDL file first.', 'info')
 
     def generate_constraint(self):
         if self.input_file_name != '':
@@ -286,6 +307,26 @@ class Ui_MainWindow(object):
                         except:
                             pass
                 gen_and_parse.write_const_to_file(constr_ports, constraint_output_file_path, self.using_onboard_clock)
+        else:
+            showdialog('Browse VHDL file first.', 'info')
+
+
+def showdialog(message, severity='warning'):
+    msg = QtWidgets.QMessageBox()
+    if severity == 'warning':
+        msg.setIcon(QtWidgets.QMessageBox.Warning)
+        msg.setWindowTitle('Warning')
+    elif severity == 'info':
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setWindowTitle('Info')
+    elif severity == 'critical':
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+        msg.setWindowTitle('Critical')
+    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+    msg.setText(message)
+    msg.setTextFormat(QtCore.Qt.RichText)
+    msg.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
+    return msg.exec_()
 
 
 def showwindow():

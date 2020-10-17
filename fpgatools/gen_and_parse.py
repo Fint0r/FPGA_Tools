@@ -1,4 +1,5 @@
 import re
+from fpgatools.FPGA_Tools import showdialog
 
 
 def read_file_content(path):
@@ -56,8 +57,7 @@ def parse_entity(file_content):
                 ports[port_name].append(spec.strip())
         return ports, module_name
     else:
-        print('Did not find any module name.')
-
+        showdialog('This is not valid VHDL module.\nPlease try again.')
 
 
 def create_tb(libs, ports, module_name, output_path):
@@ -124,9 +124,8 @@ def write_const_to_file(port_and_package_dict, output_path, use_onboard_clock):
         del port_and_package_dict['Clock']
 
     for port_name, package_pin in port_and_package_dict.items():
-        port_name = '{' + port_name + '}'
-        const_content += f'set_property PACKAGE_PIN {package_pin} [get_ports {port_name}]\n'
-        const_content += f'\t set_property IOSTANDARD LVCMOS33 [get_ports {port_name}]\n\n'
+        const_content += f'set_property PACKAGE_PIN {package_pin} [get_ports {{{port_name}}}]\n'
+        const_content += f'\t set_property IOSTANDARD LVCMOS33 [get_ports {{{port_name}}}]\n\n'
 
     with open(output_path, 'w') as of:
         of.write(const_content)
