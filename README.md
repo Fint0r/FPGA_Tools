@@ -17,7 +17,7 @@ Controls:
 ## Custom port list format
 Custom pinout (port list) can be added to the software. You can browse your JSON file with File -> Import Pinout.
 Custom port list should be edited according to the following example.
-```json
+```javascript
 {
    "Name":"Name of your config", // Shall include a name
    "Switch":{   // Every pin shall be organized into groups
