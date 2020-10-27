@@ -14,6 +14,9 @@ Controls:
  - You can choose to **use onboard 100 MHz clock**.
 ![Picture of GUI](https://github.com/Fint0r/FPGA_Tools/blob/master/misc/doc/sw_gui.jpg?raw=true "Picture of the SW")
 
+## Installation
+Download and run the executable from [here](https://github.com/Fint0r/FPGA_Tools/releases).
+
 ## Custom port list format
 Custom pinout (port list) can be added to the software. You can browse your JSON file with File -> Import Pinout.
 Custom port list should be edited according to the following example.
@@ -54,17 +57,25 @@ ft.showwindow()
 ```
 
 https://pypi.org/project/fpgatools/
-## Windows
 
-Runnable exe can be found under "Runnable exe" folder.\
+## Build your own executable
+### Windows
 Exe generation can be run with misc/generate_exe.bat.
 
-## Linux
+### Linux
+You can generate the executable by running the misc/generate_linux.sh script. Which creates a python virtual environment, installs the required python packages and builds FPGA Tools.
+#### Requirements:
+##### Debian (Tested on Ubuntu 20.04 LTS):
+- `python3`
+- `python3-venv` (for python virtual environment)
+- `libxcb-xinerama0` (if your de uses wayland you need this)
 
-Executable can be found in "Runnable exe" folder.\
-You can generate the executable by running the misc/generate_linux.sh script.
+##### Arch (Tested on Manjaro 20.1.2):
+- `python3`
+- `glibc` (for pyinstaller)
+- `binutils` (for pyinstaller)
 
-INFO: Be sure libxcb installed. If not install with: "sudo apt-get install libxcb-xinerama0".
+
 ## Misc
 Generated GUI design can be found in misc/gui_design.ui. Created with QT Designer.
 Few popular antivirus software alerts useres about virus in exe. Its false positive alert, because the exe is unsigned (not certificated) [more about signing EXE](https://stackoverflow.com/questions/252226/signing-a-windows-exe-file?noredirect=1&lq=1). [VirusTotal report](https://www.virustotal.com/gui/file/15d41d4d85b69bdeec66af8920b53919d32ba3c486c09b2b85eca7ae09223686/detection)

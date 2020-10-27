@@ -141,3 +141,4 @@ dist
 
 # Deploy generation
 fpgatools.egg-info
+/runnable exe/
