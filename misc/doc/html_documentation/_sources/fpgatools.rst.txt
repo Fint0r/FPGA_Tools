@@ -1,0 +1,20 @@
+fpgatools package
+=================
+
+
+fpgatools.FPGA\_Tools module
+----------------------------
+
+.. automodule:: fpgatools.FPGA_Tools
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+fpgatools.gen\_and\_parse module
+--------------------------------
+
+.. automodule:: fpgatools.gen_and_parse
+   :members:
+   :undoc-members:
+   :show-inheritance:

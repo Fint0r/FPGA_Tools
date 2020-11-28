@@ -1,0 +1,611 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fpgatools package &mdash; FPGA Tools 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> FPGA Tools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">fpgatools package</a><ul>
+<li><a class="reference internal" href="#module-fpgatools.FPGA_Tools">fpgatools.FPGA_Tools module</a></li>
+<li><a class="reference internal" href="#module-fpgatools.gen_and_parse">fpgatools.gen_and_parse module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FPGA Tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>fpgatools package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/fpgatools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fpgatools-package">
+<h1>fpgatools package<a class="headerlink" href="#fpgatools-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-fpgatools.FPGA_Tools">
+<span id="fpgatools-fpga-tools-module"></span><h2>fpgatools.FPGA_Tools module<a class="headerlink" href="#module-fpgatools.FPGA_Tools" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="fpgatools.FPGA_Tools.TreeComboBox">
+<em class="property">class </em><code class="sig-prename descclassname">fpgatools.FPGA_Tools.</code><code class="sig-name descname">TreeComboBox</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.TreeComboBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QComboBox</span></code></p>
+<p>Nested combobox, which will generate I/O groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>QComboBox</strong> (<em>class</em>) – Inherit from QComboBox</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.TreeComboBox.eventFilter">
+<code class="sig-name descname">eventFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.TreeComboBox.eventFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets points parent’s event to child’s event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – parent object</p></li>
+<li><p><strong>event</strong> – parent event</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.TreeComboBox.hidePopup">
+<code class="sig-name descname">hidePopup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.TreeComboBox.hidePopup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hides root’s combobox popup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.TreeComboBox.selectIndex">
+<code class="sig-name descname">selectIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.TreeComboBox.selectIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets parent index to point to the new tree combobox.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>class</em>) – Parent object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.TreeComboBox.showPopup">
+<code class="sig-name descname">showPopup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.TreeComboBox.showPopup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets root model index to point to the nested combobox.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow">
+<em class="property">class </em><code class="sig-prename descclassname">fpgatools.FPGA_Tools.</code><code class="sig-name descname">UiMainWindow</code><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main window class.</p>
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.add_custom_pinout">
+<code class="sig-name descname">add_custom_pinout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.add_custom_pinout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds custom FPGA pinout to the list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.all_port">
+<code class="sig-name descname">all_port</code><em class="property"> = [{'Name': 'Nexys 4', 'Switch': {'SW0': 'U9', 'SW1': 'U8', 'SW2': 'R7', 'SW3': 'R6', 'SW4': 'R5', 'SW5': 'V7', 'SW6': 'V6', 'SW7': 'V5', 'SW8': 'U4', 'SW9': 'V2', 'SW10': 'U2', 'SW11': 'T3', 'SW12': 'T1', 'SW13': 'R3', 'SW14': 'P3', 'SW15': 'P4'}, 'LED': {'LED0': 'T8', 'LED1': 'V9', 'LED2': 'R8', 'LED3': 'T6', 'LED4': 'T5', 'LED5': 'T4', 'LED6': 'U7', 'LED7': 'U6', 'LED8': 'V4', 'LED9': 'U3', 'LED10': 'V1', 'LED11': 'R1', 'LED12': 'P5', 'LED13': 'U1', 'LED14': 'R2', 'LED15': 'P2'}, 'RGB': {'LED16_R': 'K5', 'LED16_G': 'F13', 'LED16_B': 'F6', 'LED17_R': 'K6', 'LED17_G': 'H6', 'LED17_B': 'L16'}, '7SEG': {'7SEG_CA': 'L3', '7SEG_CB': 'N1', '7SEG_CC': 'L5', '7SEG_CD': 'L4', '7SEG_CE': 'K3', '7SEG_CF': 'M2', '7SEG_CG': 'L6', '7SEG_DP': 'M4', '7SEG_AN0': 'N6', '7SEG_AN1': 'M6', '7SEG_AN2': 'M3', '7SEG_AN3': 'N5', '7SEG_AN4': 'N2', '7SEG_AN5': 'N4', '7SEG_AN6': 'L1', '7SEG_AN7': 'M1'}, 'Button': {'BTN3': 'E16', 'BTN2': 'F15', 'BTN1': 'T16', 'BTN0': 'R10', 'BTND': 'V10'}, 'VGA': {'VGA_RED0': 'A3', 'VGA_RED1': 'B4', 'VGA_RED2': 'C5', 'VGA_RED3': 'A4', 'VGA_GREEN0': 'C6', 'VGA_GREEN1': 'A5', 'VGA_GREEN2': 'B6', 'VGA_GREEN3': 'A6', 'VGA_BLUE0': 'B7', 'VGA_BLUE1': 'C7', 'VGA_BLUE2': 'D7', 'VGA_BLUE3': 'D8', 'VGA_HSYNC': 'B11', 'VGA_VSYNC': 'B12'}, 'UART': {'UART_TXD_IN': 'C4', 'UART_RXD_OUT': 'D4', 'UART_CTS': 'D3', 'UART_RTS': 'E5'}, 'PS2': {'PS2_CLK': 'F4', 'PS2_DATA': 'B2'}, 'ACL': {'ACL_MISO': 'D13', 'ACL_MOSI': 'B14', 'ACL_SCLK': 'D15', 'ACL_CSN': 'C15', 'ACL_INT1': 'C16', 'ACL_INT2': 'E15'}, 'Temp': {'TMP_SCL': 'F16', 'TMP_SDA': 'G16', 'TMP_INT': 'D14', 'TMP_CT': 'C14'}, 'SD': {'SD_RESET': 'E2', 'SD_CD': 'A1', 'SD_SCK': 'B1', 'SD_CMD': 'C1', 'SD_DAT0': 'C2', 'SD_DAT1': 'E1', 'SD_DAT2': 'F1', 'SD_DAT3': 'D2'}, 'Audio': {'AUD_PWM': 'A11', 'AUD_SD': 'D12', 'MIC_CLK': 'J5', 'MIC_DATA': 'H5', 'MIC_LRSEL': 'F5'}, 'QSPI': {'QSPI_SCK': 'E9', 'QSPI_D0': 'K17', 'QSPI_D1': 'K18', 'QSPI_D2': 'L14', 'QSPI_D3': 'M14', 'QSPI_CSN': 'L13'}, 'CLK, Reset': {'CPU_RESETN': 'C12', 'Clock': 'E3'}}, {'Name': 'Nexys 4 DDR', 'Switch': {'SW0': 'J15', 'SW1': 'L16', 'SW2': 'M13', 'SW3': 'R15', 'SW4': 'R17', 'SW5': 'T18', 'SW6': 'U18', 'SW7': 'R13', 'SW8': 'T8', 'SW9': 'U8', 'SW10': 'R16', 'SW11': 'T13', 'SW12': 'H6', 'SW13': 'U12', 'SW14': 'U11', 'SW15': 'V10'}, 'LED': {'LED0': 'H17', 'LED1': 'K15', 'LED2': 'J13', 'LED3': 'N14', 'LED4': 'R18', 'LED5': 'V17', 'LED6': 'U17', 'LED7': 'U16', 'LED8': 'V16', 'LED9': 'T15', 'LED10': 'U14', 'LED11': 'T16', 'LED12': 'V15', 'LED13': 'V14', 'LED14': 'V12', 'LED15': 'V11'}, 'RGB': {'LED16_B': 'R12', 'LED16_G': 'M16', 'LED16_R': 'N15', 'LED17_B': 'G14', 'LED17_G': 'R11', 'LED17_R': 'N16'}, '7SEG': {'7SEG_CA': 'T10', '7SEG_CB': 'R10', '7SEG_CC': 'K16', '7SEG_CD': 'K13', '7SEG_CE': 'P15', '7SEG_CF': 'T11', '7SEG_CG': 'L18', '7SEG_DP': 'H15', '7SEG_AN0': 'J17', '7SEG_AN1': 'J18', '7SEG_AN2': 'T9', '7SEG_AN3': 'J14', '7SEG_AN4': 'P14', '7SEG_AN5': 'T14', '7SEG_AN6': 'K2', '7SEG_AN7': 'U13'}, 'Button': {'BTN3': 'N17', 'BTN2': 'M18', 'BTN1': 'P17', 'BTN0': 'M17', 'BTND': 'P18'}, 'VGA': {'VGA_RED0': 'A3', 'VGA_RED1': 'B4', 'VGA_RED2': 'C5', 'VGA_RED3': 'A4', 'VGA_GREEN0': 'C6', 'VGA_GREEN1': 'A5', 'VGA_GREEN2': 'B6', 'VGA_GREEN3': 'A6', 'VGA_BLUE0': 'B7', 'VGA_BLUE1': 'C7', 'VGA_BLUE2': 'D7', 'VGA_BLUE3': 'D8', 'VGA_HSYNC': 'B11', 'VGA_VSYNC': 'B12'}, 'UART': {'UART_TXD_IN': 'C4', 'UART_RXD_OUT': 'D4', 'UART_CTS': 'D3', 'UART_RTS': 'E5'}, 'PS2': {'PS2_CLK': 'F4', 'PS2_DATA': 'B2'}, 'ACL': {'ACL_MISO': 'E15', 'ACL_MOSI': 'F14', 'ACL_SCLK': 'F15', 'ACL_CSN': 'D15', 'ACL_INT1': 'B13', 'ACL_INT2': 'C16'}, 'Temp': {'TMP_SCL': 'C14', 'TMP_SDA': 'C15', 'TMP_INT': 'D13', 'TMP_CT': 'B14'}, 'SD': {'SD_RESET': 'E2', 'SD_CD': 'A1', 'SD_SCK': 'B1', 'SD_CMD': 'C1', 'SD_DAT0': 'C2', 'SD_DAT1': 'E1', 'SD_DAT2': 'F1', 'SD_DAT3': 'D2'}, 'Audio': {'AUD_PWM': 'A11', 'AUD_SD': 'D12', 'MIC_CLK': 'J5', 'MIC_DATA': 'H5', 'MIC_LRSEL': 'F5'}, 'QSPI': {'QSPI_D0': 'K17', 'QSPI_D1': 'K18', 'QSPI_D2': 'L14', 'QSPI_D3': 'M14', 'QSPI_CSN': 'L13'}, 'CLK, Reset': {'CPU_RESETN': 'C12', 'Clock': 'E3'}}]</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.all_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.browse">
+<code class="sig-name descname">browse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.browse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Browse event. Parses the chosen VHDL file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.chosen_portlist">
+<code class="sig-name descname">chosen_portlist</code><em class="property"> = {}</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.chosen_portlist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.flattened_portlist">
+<code class="sig-name descname">flattened_portlist</code><em class="property"> = {}</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.flattened_portlist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.generate_constraint">
+<code class="sig-name descname">generate_constraint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.generate_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate constraint event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.generate_tb">
+<code class="sig-name descname">generate_tb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.generate_tb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate testbench event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.input_file_name">
+<code class="sig-name descname">input_file_name</code><em class="property"> = ''</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.input_file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.input_file_path">
+<code class="sig-name descname">input_file_path</code><em class="property"> = ''</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.input_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.onboard_clock_clicked">
+<code class="sig-name descname">onboard_clock_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.onboard_clock_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clock selection event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.output_file_path">
+<code class="sig-name descname">output_file_path</code><em class="property"> = ''</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.output_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.picked_board">
+<code class="sig-name descname">picked_board</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.picked_board" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event on choosing development board.
+Hides clock selection if custom board has been chosen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>class</em>) – Object of chosen element in combobox.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.pinout_name_list">
+<code class="sig-name descname">pinout_name_list</code><em class="property"> = []</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.pinout_name_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.print_help">
+<code class="sig-name descname">print_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.print_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints help in gui.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.project_path">
+<code class="sig-name descname">project_path</code><em class="property"> = ''</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.project_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.retranslateUi">
+<code class="sig-name descname">retranslateUi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">MainWindow</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.retranslateUi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Additional setting for main window. Mostly text and callback function setting to trigger events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>MainWindow</strong> (<em>class</em>) – Object of main window instance</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.set_items_in_table">
+<code class="sig-name descname">set_items_in_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_row_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.set_items_in_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets every element in I/O table to tree combobox and adds groups to it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>current_row_id</strong> (<em>int</em>) – index of the current element in I/O table.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.setup_ui">
+<code class="sig-name descname">setup_ui</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">MainWindow</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.setup_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the gui.
+Creates the window, creates menu, creates table and comboboxes and corresponding labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>MainWindow</strong> (<em>class</em>) – Object of main window instance</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.using_onboard_clock">
+<code class="sig-name descname">using_onboard_clock</code><em class="property"> = False</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.using_onboard_clock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="fpgatools.FPGA_Tools.UiMainWindow.xdc_ports">
+<code class="sig-name descname">xdc_ports</code><em class="property"> = {}</em><a class="headerlink" href="#fpgatools.FPGA_Tools.UiMainWindow.xdc_ports" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.FPGA_Tools.showdialog">
+<code class="sig-prename descclassname">fpgatools.FPGA_Tools.</code><code class="sig-name descname">showdialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">severity</span><span class="o">=</span><span class="default_value">'warning'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.showdialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Messagebox dialog. Prints message to the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – Message of the messagebox.</p></li>
+<li><p><strong>severity</strong> (<em>str</em>) – Severity of the message: warning/info/critical.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.FPGA_Tools.showwindow">
+<code class="sig-prename descclassname">fpgatools.FPGA_Tools.</code><code class="sig-name descname">showwindow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.FPGA_Tools.showwindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main funciton. Creates GUI. Starts application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-fpgatools.gen_and_parse">
+<span id="fpgatools-gen-and-parse-module"></span><h2>fpgatools.gen_and_parse module<a class="headerlink" href="#module-fpgatools.gen_and_parse" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.create_tb">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">create_tb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">libs</span></em>, <em class="sig-param"><span class="n">ports</span></em>, <em class="sig-param"><span class="n">module_name</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.create_tb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates testbench content and writes to given output path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>libs</strong> (<em>list</em>) – list of included libraries</p></li>
+<li><p><strong>ports</strong> (<em>dict</em>) – dictionary of ports {‘&lt;port name&gt;’: ‘&lt;port content&gt;’}</p></li>
+<li><p><strong>module_name</strong> (<em>str</em>) – name of the source module.</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – path of the output file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.delete_comments">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">delete_comments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_content</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.delete_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all comments from the given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_content</strong> (<em>str</em>) – file content</p>
+</dd>
+<dt class="field-even">Return str</dt>
+<dd class="field-even"><p>same content without comments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.generate_tb">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">generate_tb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.generate_tb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates testbench. This function needed due to logical belonging.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – input file path</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – output file path</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.get_stuff">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">get_stuff</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.get_stuff" title="Permalink to this definition">¶</a></dt>
+<dd><p>High level parse function. Calls every parser and gives back queried values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – Source VHDL module path</p>
+</dd>
+<dt class="field-even">Return tuple</dt>
+<dd class="field-even"><p>(&lt;{&lt;port name&gt;: [&lt;port content&gt;]}&gt;, ‘&lt;module name&gt;’, [&lt;libraries&gt;])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.parse_entity">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">parse_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_content</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.parse_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses entity of the given VHDL file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_content</strong> (<em>str</em>) – file content</p>
+</dd>
+<dt class="field-even">Return tuple</dt>
+<dd class="field-even"><p>(&lt;list of ports&gt;, &lt;name of the module&gt;)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.parse_libs">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">parse_libs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_content</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.parse_libs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query libraries from given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_content</strong> (<em>str</em>) – file content</p>
+</dd>
+<dt class="field-even">Return list</dt>
+<dd class="field-even"><p>list of the found libraries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.read_file_content">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">read_file_content</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.read_file_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads content of given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – file path</p>
+</dd>
+<dt class="field-even">Return str</dt>
+<dd class="field-even"><p>Content of the given file as string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fpgatools.gen_and_parse.write_const_to_file">
+<code class="sig-prename descclassname">fpgatools.gen_and_parse.</code><code class="sig-name descname">write_const_to_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">port_and_package_dict</span></em>, <em class="sig-param"><span class="n">output_path</span></em>, <em class="sig-param"><span class="n">use_onboard_clock</span></em>, <em class="sig-param"><span class="n">clock_var</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fpgatools.gen_and_parse.write_const_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates constraint file and writes it to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port_and_package_dict</strong> (<em>dict</em>) – peer to peer binding of signals and I/O</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – output file path</p></li>
+<li><p><strong>use_onboard_clock</strong> (<em>bool</em>) – clock selection boolean</p></li>
+<li><p><strong>clock_var</strong> (<em>str</em>) – name of the selected clock port</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jozsef Fintor
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
