@@ -14,6 +14,10 @@ ddr_chosen = False
 
 
 class TreeComboBox(QComboBox):
+    """Nested combobox, which will generate I/O groups.
+
+    :param class QComboBox: Inherit from QComboBox
+    """
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -31,10 +35,18 @@ class TreeComboBox(QComboBox):
         self.view().viewport().installEventFilter(self)
 
     def showPopup(self):
+        """Sets root model index to point to the nested combobox.
+
+        :return:
+        """
         self.setRootModelIndex(QModelIndex())
         super().showPopup()
 
     def hidePopup(self):
+        """Hides root's combobox popup.
+
+        :return:
+        """
         self.setRootModelIndex(self.view().currentIndex().parent())
         self.setCurrentIndex(self.view().currentIndex().row())
         if self.__skip_next_hide:
@@ -43,17 +55,31 @@ class TreeComboBox(QComboBox):
             super().hidePopup()
 
     def selectIndex(self, index):
+        """Sets parent index to point to the new tree combobox.
+
+        :param class index: Parent object
+        :return:
+        """
         self.setRootModelIndex(index.parent())
         self.setCurrentIndex(index.row())
 
-    def eventFilter(self, object, event):
-        if event.type() == QEvent.MouseButtonPress and object is self.view().viewport():
+    def eventFilter(self, obj, event):
+        """Sets points parent's event to child's event.
+
+        :param obj: parent object
+        :param event: parent event
+        :return:
+        """
+        if event.type() == QEvent.MouseButtonPress and obj is self.view().viewport():
             index = self.view().indexAt(event.pos())
             self.__skip_next_hide = not self.view().visualRect(index).contains(event.pos())
         return False
 
 
-class Ui_MainWindow(object):
+class UiMainWindow(object):
+    """Main window class.
+
+    """
     input_file_path = ''
     output_file_path = ''
     xdc_ports = {}
@@ -65,7 +91,13 @@ class Ui_MainWindow(object):
     chosen_portlist = {}
     pinout_name_list = []
 
-    def setupUi(self, MainWindow):
+    def setup_ui(self, MainWindow):
+        """Sets the gui.
+        Creates the window, creates menu, creates table and comboboxes and corresponding labels
+
+        :param class MainWindow: Object of main window instance
+        :return:
+        """
         MainWindow.setObjectName("MainWindow")
         MainWindow.setMinimumSize(640, 500)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -138,6 +170,11 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
+        """Additional setting for main window. Mostly text and callback function setting to trigger events.
+
+        :param class MainWindow: Object of main window instance
+        :return:
+        """
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "TestBench and Constraint Generator"))
         item = self.tableWidget.verticalHeaderItem(0)
@@ -183,9 +220,17 @@ class Ui_MainWindow(object):
         del self.chosen_portlist['Name']
 
     def print_help(self):
+        """Prints help in gui.
+
+        :return:
+        """
         showdialog('For more information visit <a href="https://github.com/Fint0r/FPGA_Tools/">Our GitHub page.</a><br><br>Feel free to contact is if you have any question', 'info')
 
     def add_custom_pinout(self):
+        """Adds custom FPGA pinout to the list.
+
+        :return:
+        """
         qfd = QFileDialog()
         file_filter = 'JSON file(*.json)'
         json_path = QFileDialog.getOpenFileName(qfd, 'Open json file', 'C:/', file_filter)[0]
@@ -202,6 +247,12 @@ class Ui_MainWindow(object):
                 showdialog('Invalid custom port list format!\nCheck help for more information.')
 
     def picked_board(self, index):
+        """Event on choosing development board.
+        Hides clock selection if custom board has been chosen.
+
+        :param class index: Object of chosen element in combobox.
+        :return:
+        """
         item = self.pinout_name_list[index.row()]
         for element in self.all_port:
             if element['Name'] == item:
@@ -221,12 +272,20 @@ class Ui_MainWindow(object):
             self.checkBox.setChecked(False)
 
     def onboard_clock_clicked(self):
+        """Clock selection event.
+
+        :return:
+        """
         if self.checkBox.checkState():
             self.using_onboard_clock = True
         else:
             self.using_onboard_clock = False
 
     def browse(self):
+        """Browse event. Parses the chosen VHDL file.
+
+        :return:
+        """
         qfd = QFileDialog()
         file_filter = 'VHDL file(*.vhd);;All files(*)'
         self.input_file_path = QFileDialog.getOpenFileName(qfd, 'Open source file',  'C:/', file_filter)[0]
@@ -261,6 +320,11 @@ class Ui_MainWindow(object):
                 self.set_items_in_table(i)
 
     def set_items_in_table(self, current_row_id):
+        """Sets every element in I/O table to tree combobox and adds groups to it.
+
+        :param int current_row_id: index of the current element in I/O table.
+        :return:
+        """
         model = QtGui.QStandardItemModel()
 
         for key, value in self.chosen_portlist.items():
@@ -278,6 +342,10 @@ class Ui_MainWindow(object):
         self.tableWidget.setCellWidget(current_row_id, 1, combobox)
 
     def generate_tb(self):
+        """Generate testbench event.
+
+        :return:
+        """
         if self.input_file_name != '':
             qfd = QFileDialog()
             file_filter = 'VHDL file(*.vhd)'
@@ -289,6 +357,10 @@ class Ui_MainWindow(object):
             showdialog('Browse VHDL file first.', 'info')
 
     def generate_constraint(self):
+        """Generate constraint event.
+
+        :return:
+        """
         if self.input_file_name != '':
             qfd = QFileDialog()
             file_filter = 'XDC file(*.xdc)'
@@ -311,6 +383,12 @@ class Ui_MainWindow(object):
 
 
 def showdialog(message, severity='warning'):
+    """Messagebox dialog. Prints message to the user.
+
+    :param str message: Message of the messagebox.
+    :param str severity: Severity of the message: warning/info/critical.
+    :return:
+    """
     msg = QtWidgets.QMessageBox()
     if severity == 'warning':
         msg.setIcon(QtWidgets.QMessageBox.Warning)
@@ -329,10 +407,14 @@ def showdialog(message, severity='warning'):
 
 
 def showwindow():
+    """Main funciton. Creates GUI. Starts application.
+
+    :return:
+    """
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
+    ui = UiMainWindow()
+    ui.setup_ui(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
 
