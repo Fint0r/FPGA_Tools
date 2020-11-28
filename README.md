@@ -5,6 +5,8 @@ Project supports:
   - TestBench generation
   - Constraint generation
 
+For docstring please check https://fint0r.github.io/FPGA_Tools/fpgatools.html#module-fpgatools.FPGA_Tools
+
 Controls:
  - **File -> Browse:** Search for your source VHDL file. Will be used for signal names and the base for the generation.
  - **File -> Import Pinout:** Custom port list can be imported.
